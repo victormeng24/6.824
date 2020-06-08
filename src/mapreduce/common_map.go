@@ -62,10 +62,12 @@ func doMap(
 	}
 	keyValue := mapF(inFile, string(content))
 	mapper := make([][]KeyValue, nReduce)
+	// determine to which reducer
 	for _, v := range keyValue {
 		idx := ihash(v.Key) % nReduce
 		mapper[idx] = append(mapper[idx], v)
 	}
+	// write to target File
 	for index, v := range mapper {
 		targetFileName := reduceName(jobName, mapTask, index)
 		fileNameToChoose, err := os.Create(targetFileName)

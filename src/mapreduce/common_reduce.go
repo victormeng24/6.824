@@ -51,6 +51,8 @@ func doReduce(
 	// Your code here (Part I).
 	//
 	keyV := make(map[string][]string)
+
+	// store the key and collection of v into a map
 	for i := 0; i < nMap; i++ {
 		mapFileName := reduceName(jobName, i, reduceTask)
 		input, err := ioutil.ReadFile(mapFileName)
@@ -69,6 +71,7 @@ func doReduce(
 		panic(err)
 	}
 
+	// write the result json format to target file
 	enc := json.NewEncoder(outputFile)
 	for key, value := range keyV {
 		if err := enc.Encode(KeyValue{key, reduceF(key, value)}); err != nil {
@@ -79,5 +82,4 @@ func doReduce(
 	if err := outputFile.Close(); err != nil {
 		panic(err)
 	}
-
 }
